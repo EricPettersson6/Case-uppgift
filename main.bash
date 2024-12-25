@@ -30,6 +30,7 @@ show_Main_Menu() {
 		*) echo "Invalid choice, try again."; sleep 2 ;;
 	esac
 }
+# Exits the script
 exit_Script() {
 	clear
 	echo "Exiting script. Bye"
