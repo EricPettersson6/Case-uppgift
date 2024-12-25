@@ -20,4 +20,21 @@ show_Main_Menu() {
 	echo "=========================================================="
 	echo "	SYSTEM MANAGER (version 1.0.0) "
 	echo "----------------------------------------------------------"
+	echo
+	echo "X - Exit the system manager"
+	echo "----------------------------------------------------------"
+	echo
+	read -p "Choice: " choice
+	case $choice in
+		X) exit_Script ;;
+		*) echo "Invalid choice, try again."; sleep 2 ;;
+	esac
 }
+exit_Script() {
+	clear
+	echo "Exiting script. Bye"
+	exit 0
+}
+while true; do
+	show_Main_Menu
+done
