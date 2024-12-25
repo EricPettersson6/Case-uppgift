@@ -15,8 +15,9 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Funktion för att visa huvudmenyn
-show_mainmenu() {
+show_Main_Menu() {
 	clear
-	echo "================================="
+	echo "=========================================================="
 	echo "	SYSTEM MANAGER (version 1.0.0) "
-	echo "---------------------------------"
+	echo "----------------------------------------------------------"
+}
