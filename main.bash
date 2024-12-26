@@ -43,8 +43,10 @@ computer_Info() {
 	echo " Computer name: 	 $(hostname)"
 	echo " OS Description: 	 $(lsb_release -d | cut -f2)"
 	echo " Linux Kernal: 		 $(uname -r)"
-	echo " CPU: $(lscpu | grep 'Model name' | awk -F':' '{print $2}' | tr -d '\n')" #Clean up output
-	echo " Total memory:	 	$(free -h | grep 'Mem:' | awk '{print $2}' | sed 's/Gi/GB/')"
+	echo " CPU:	 $(lscpu | grep 'Model name' | awk -F':' '{print $2}' | tr -d '\n')" #Clean up output
+	echo " Total memory:		$(free -h | grep 'Mem:' | awk '{print $2}' | sed 's/Gi/GB/')"
+	echo " Free disk space:	 $(df -h --output=avail,pcent / | awk 'NR==2 {printf "%s (%s)", $1, $2}')"
+
 	read -p "Press enter to continue... " enter
 
 }
