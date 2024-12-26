@@ -21,14 +21,28 @@ show_Main_Menu() {
 	echo "	SYSTEM MANAGER (version 1.0.0) "
 	echo "----------------------------------------------------------"
 	echo
+	echo "ci - Computer Info	(Computer information"
 	echo "X - Exit the system manager"
 	echo "----------------------------------------------------------"
 	echo
 	read -p "Choice: " choice
 	case $choice in
+		ci) computer_Info ;;
 		X) exit_Script ;;
 		*) echo "Invalid choice, try again."; sleep 2 ;;
 	esac
+}
+#Shows general computer information
+computer_Info() {
+	clear
+	echo "=========================================================="
+	echo " 		 SYSTEM MANAGER (version 1.0.0)"
+	echo "			Computer information "
+	echo "----------------------------------------------------------"
+	echo
+	echo " Computer name: 	 $(hostname)"
+	read -p "Press enter to continue... " enter
+
 }
 # Exits the script
 exit_Script() {
