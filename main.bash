@@ -5,16 +5,16 @@
 #
 # Licens: MIT License
 #
-# Motivering: vi valde MIT license för att den 'r enkel och till[ter fri anv'ndning, modifiering och distribution av koden.
+# Motivering: vi valde MIT license för att den är enkelt och till[ter fri användning, modifiering och distribution av koden.
 #
 
-# Kontrollera om skriptet körs som root
+# controlls that the script is running with root acces if not it explains it and exits
 if [[ $EUID -ne 0 ]]; then
 	echo "Detta skript måste köras som  root (sudo). Avslutar."
 	exit 1
 fi
 
-# Funktion för att visa huvudmenyn
+# Funktion that shows the main menu
 show_Main_Menu() {
 	clear
 	echo "=========================================================="
@@ -45,7 +45,8 @@ computer_Info() {
 	printf "%-18s: %s\n" "Linux Kernel" "$(uname -r)"
 	printf "%-18s: %s\n" "CPU" "$(lscpu | grep 'Model name' | awk -F':' '{print $2}' | xargs)"
 	printf "%-18s: %s\n" "Total memory" "$(free -h | grep 'Mem:' | awk '{print $2}' | sed 's/Gi/GB/')"
-	printf "%-18s: %s\n" "Free disk space" "$(df -h --output=avail,pcent / | awk 'NR==2 {printf "%s (%s)", $1, $2}')"
+	printf "%-18s: %s\n" "Free disk space" "$(df -h --output=avail,pcent / | awk 'NR==2 {printf "%s (%s)", $1, $2}')" #shows the avalible disk space and its usage percentage for the root partition.
+ 	printf "%-18s: %s\n" "IP-address" "$(hostname -I | xargs)"
 	
 	echo
 	echo "----------------------------------------------------------"
