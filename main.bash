@@ -40,15 +40,12 @@ computer_Info() {
 	echo "			Computer information "
 	echo "----------------------------------------------------------"
 	echo 
-	printf "%-20s: %s\n" Computer name:" 	 $(hostname)"
-	printf "%-20s: %s\n" OS Description:"	 $(lsb_release -d | cut -f2)"
-	if ! command -v lsb_release &> /dev/null; then
-	 echo "OS Description information is unavailable."
-	fi
-	printf "%-20s: %s\n" Linux Kernal:" 	 $(uname -r)"
-	printf "%-20s: %s\n" CPU:" $(lscpu | grep 'Model name' | awk -F':' '{print $2}' | xargs)"
-	printf "%-20s: %s\n" Total memory:"		$(free -h | grep 'Mem:' | awk '{print $2}' | sed 's/Gi/GB/')"
-	printf "%-20s: %s\n" Free disk space:"	 $(df -h --output=avail,pcent / | awk 'NR==2 {printf "%s (%s)", $1, $2}')"
+	printf "%-20s: %s\n" "Computer name" "$(hostname)"
+	printf "%-20s: %s\n" "OS Description" "$(lsb_release -d | cut -f2)"
+	printf "%-20s: %s\n" "Linux Kernel" "$(uname -r)"
+	printf "%-20s: %s\n" "CPU" "$(lscpu | grep 'Model name' | awk -F':' '{print $2}' | xargs)"
+	printf "%-20s: %s\n" "Total memory" "$(free -h | grep 'Mem:' | awk '{print $2}' | sed 's/Gi/GB/')"
+	printf "%-20s: %s\n" "Free disk space" "$(df -h --output=avail,pcent / | awk 'NR==2 {printf \"%s (%s)\", $1, $2}')"
 
 	read -p "Press enter to continue... " enter
 
