@@ -5,7 +5,7 @@
 #
 # Licens: MIT License
 #
-# Motivering: vi valde MIT license för att (skriv motivering här)
+# Motivering: vi valde MIT license för att den 'r enkel och till[ter fri anv'ndning, modifiering och distribution av koden.
 #
 
 # Kontrollera om skriptet körs som root
@@ -42,8 +42,11 @@ computer_Info() {
 	echo
 	echo " Computer name: 	 $(hostname)"
 	echo " OS Description: 	 $(lsb_release -d | cut -f2)"
+	if ! command -v lsb_release &> /dev/null; then
+	 echo "OS Description information is unavailable."
+	fi
 	echo " Linux Kernal: 		 $(uname -r)"
-	echo " CPU:	 $(lscpu | grep 'Model name' | awk -F':' '{print $2}' | tr -d '\n')" #Clean up output
+	echo " CPU:                $(lscpu | grep 'Model name' | awk -F':' '{print $2}' | xargs)"
 	echo " Total memory:		$(free -h | grep 'Mem:' | awk '{print $2}' | sed 's/Gi/GB/')"
 	echo " Free disk space:	 $(df -h --output=avail,pcent / | awk 'NR==2 {printf "%s (%s)", $1, $2}')"
 
