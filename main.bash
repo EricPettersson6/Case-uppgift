@@ -24,7 +24,7 @@ show_Main_Menu() {
 	echo "ci - Computer Info	(Computer information)"
  	echo 
   	echo "ua - User Add		(Create a new user)"
-   	echo "ul - User Liew		(List all login users)"
+   	echo "ul - User List 		(List all login users)"
     	echo "uv - User View		(View user properties)"
      	echo "um - User Modify		(Modify user properties)"
       	echo "ud - User Delete		(Delete a login user)"
@@ -48,8 +48,8 @@ show_Main_Menu() {
 	read -p "Choice: " choice
 	case $choice in
 		ci) computer_Info ;; 	# Call the funtion to display computer info
-  		ua) add_User ;; 	# Call the funktion for creating a user
-    		ul) ;;			# Placeholder for listing all users
+  		ua) user_add ;; 	# Call the funktion for creating a user
+    		ul) user_list;;			# Calls the funktion to list all users that can log in byt not system
 		uv) ;;                  # Placeholder for viewing user properties
   		um) ;;			# Placeholder for modifying user properties
     		ud) ;;			# Placeholder for deleting a user
@@ -89,7 +89,7 @@ computer_Info() {
 	read -p "Press enter to continue... " enter
 }
 #Funktion för att lägga till en ny användare
-add_User(){
+user_Add(){
 	clear
 	echo "=========================================================="
 	echo " 		 SYSTEM MANAGER (version 1.0.0)"
@@ -131,6 +131,24 @@ add_User(){
      		echo "Error: Failed to create the user '$username'."
    	fi
 
+  	read -p "Press enter to return to the menu... " enter
+}
+
+#Funktion för att lista användare
+user_List(){
+	clear
+	echo "=========================================================="
+	echo " 		 SYSTEM MANAGER (version 1.0.0)"
+	echo "			List of Login Users"
+	echo "----------------------------------------------------------"
+	echo 
+
+ 	# Lista alla användare med UID >= 1000 och giltiga sakl
+  	awk -F: '$3 >= 1000 && $7 !~ /nologin|false/ {printf "%-15s %-20s %-20s\n", $1, $5, $6' /etc/passwd
+   	
+	echo
+	echo "----------------------------------------------------------"
+ 	echo
   	read -p "Press enter to return to the menu... " enter
 }
 
