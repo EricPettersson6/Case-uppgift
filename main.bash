@@ -42,14 +42,15 @@ show_Main_Menu() {
     	echo "fv - Folder View		(View folder properteis)"
      	echo "fm - Folder Modify	(modify folder properties)"
       	echo "fd - Folder Delete	(Delete a folder)"
+	echo
 	echo "X - Exit the system manager"
 	echo "----------------------------------------------------------"
 	echo
 	read -p "Choice: " choice
 	case $choice in
 		ci) computer_Info ;; 	# Call the funtion to display computer info
-  		ua) user_add ;; 	# Call the funktion for creating a user
-    		ul) user_list;;			# Calls the funktion to list all users that can log in byt not system
+  		ua) user_Add ;; 	# Call the funktion for creating a user
+    		ul) user_List;;		# Calls the funktion to list all users that can log in byt not system
 		uv) ;;                  # Placeholder for viewing user properties
   		um) ;;			# Placeholder for modifying user properties
     		ud) ;;			# Placeholder for deleting a user
@@ -144,7 +145,7 @@ user_List(){
 	echo 
 
  	# Lista alla användare med UID >= 1000 och giltiga sakl
-  	awk -F: '$3 >= 1000 && $7 !~ /nologin|false/ {printf "%-15s %-20s %-20s\n", $1, $5, $6' /etc/passwd
+  	awk -F: '$3 >= 1000 && $7 !~ /nologin|false/ {printf "%-15s %-20s %-20s\n", $1, $5, $6}' /etc/passwd
    	
 	echo
 	echo "----------------------------------------------------------"
