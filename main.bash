@@ -108,7 +108,7 @@ user_Add(){
 		return
   	fi
 
-   	read -p "Enter a comment (e.g., full name) for the user [optional]: " comment
+   	read -p "Enter a comment (e.g., full name) for the user [optional]: " comment 
 
     	# Create the user
      	if [[ -z $comment ]]; then
@@ -123,7 +123,7 @@ user_Add(){
         
   		# Prompt to set a password for the new user
     	   	passwd "$username"
-    		if [[ $? -eq 0 ]]; then
+    		if [[ $? -eq 0 ]]; then 
       			echo "Password has been set for user '$username'."
      		else
       			echo "Error: Failed to set password for user '$username'."
@@ -145,12 +145,12 @@ user_List(){
 	echo 
 
  	# Lista alla användare med UID >= 1000 och giltiga sakl
-  	awk -F: '$3 >= 1000 && $7 !~ /nologin|false/ {printf "%-15s %-20s %-20s\n", $1, $5, $6}' /etc/passwd
+  	awk -F: '$3 >= 1000 && $7 !~ /nologin|false/ {printf "%-15s %-20s %-20s\n", $1, $5, $6}' /etc/passwd # $1:användarnamn $5:kommentar $6:hemkatalog
    	
 	echo
 	echo "----------------------------------------------------------"
  	echo
-  	read -p "Press enter to return to the menu... " enter
+  	read -p "Press Enter to return to the menu... " enter
 }
 
 # Exits the script
