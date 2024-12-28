@@ -21,13 +21,48 @@ show_Main_Menu() {
 	echo "	SYSTEM MANAGER (version 1.0.0) "
 	echo "----------------------------------------------------------"
 	echo
-	echo "ci - Computer Info	(Computer information"
+	echo "ci - Computer Info	(Computer information)"
+ 	echo 
+  	echo "ua - User Add		(Create a new user)"
+   	echo "ul - User Liew		(List all login users)"
+    	echo "uv - User View		(View user properties)"
+     	echo "um - User Modify		(Modify user properties)"
+      	echo "ud - User Delete		(Delete a login user)"
+       	echo
+	echo
+ 	echo "ga - Group Add		(Create a new group)"
+  	echo "gl - Group List		(List all groups, not system groups)"
+   	echo "gv - Group View		(List all users in a group)"
+    	echo "gm - Group Modify		(Add/remove user to/from a group)"
+     	echo "gd - Group Delete		(Delete a group, not system groups)"
+	echo
+ 	echo
+  	echo "fa - Folder Add		(create a new folder)"
+   	echo "fl - Folder list		(view content in a folder)"
+    	echo "fv - Folder View		(View folder properteis)"
+     	echo "fm - Folder Modify	(modify folder properties)"
+      	echo "fd - Folder Delete	(Delete a folder)"
 	echo "X - Exit the system manager"
 	echo "----------------------------------------------------------"
 	echo
 	read -p "Choice: " choice
 	case $choice in
-		ci) computer_Info ;;
+		ci) computer_Info ;; 	# Call the funtion to display computer info
+  		ua) add_User ;; 	# Call the funktion for creating a user
+    		ul) ;;			# Placeholder for listing all users
+		uv) ;;                  # Placeholder for viewing user properties
+  		um) ;;			# Placeholder for modifying user properties
+    		ud) ;;			# Placeholder for deleting a user
+      		ga) ;;			# Placeholder for adding a group
+		gl) ;;			# Placeholder for listing groups
+  		gv) ;;			# Placeholder for viewing users in a group
+    		gm) ;;			# Placeholder for modifying group membership
+      		gd) ;; 			# Placeholder for deleting a group
+      		fa) ;;			# Placeholder for adding a folder
+		fl) ;;			# Placeholder for listing folder contents
+  		fv) ;;			# Placeholder for viewing folder properties
+    		fm) ;;			# Placeholder for modifying folder properties
+      		fd) ;;			# Placeholder for deleting a folder
 		X) exit_Script ;;
 		*) echo "Invalid choice, try again."; sleep 2 ;;
 	esac
@@ -52,8 +87,53 @@ computer_Info() {
 	echo "----------------------------------------------------------"
 	echo
 	read -p "Press enter to continue... " enter
-
 }
+#Funktion för att lägga till en ny användare
+add_User(){
+	clear
+	echo "=========================================================="
+	echo " 		 SYSTEM MANAGER (version 1.0.0)"
+	echo "			Add a New User "
+	echo "----------------------------------------------------------"
+	echo 
+
+	 # Prompt for the username
+ 	read -p "Enter the username for the new user: " username
+
+  	# Cheack if the user already exists
+   	if id "$username" &>/dev/null; then
+    		echo "Error: The user '$username' already exists."
+      		read -p "Press enter to return to the menu..." enter
+		return
+  	fi
+
+   	read -p "Enter a comment (e.g., full name) for the user [optional]: " comment
+
+    	# Create the user
+     	if [[ -z $comment ]]; then
+      		useradd -m "$username" # Creates a user with a home directory
+	else
+ 		useradd -m -c "$comment" "$username" # Creates a user with a comment
+   	fi
+
+	# Check if the user was created successfully
+   	if [[ $? -eq 0 ]]; then # $? håller exit statusen på det senaste kommandot om == 0 så fungerade det som det ska -eq = ==
+		echo "The user '$username' has been created successfully."
+        
+  		# Prompt to set a password for the new user
+    	   	passwd "$username"
+    		if [[ $? -eq 0 ]]; then
+      			echo "Password has been set for user '$username'."
+     		else
+      			echo "Error: Failed to set password for user '$username'."
+     		fi
+	else
+     		echo "Error: Failed to create the user '$username'."
+   	fi
+
+  	read -p "Press enter to return to the menu... " enter
+}
+
 # Exits the script
 exit_Script() {
 	clear
