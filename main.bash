@@ -51,7 +51,7 @@ show_Main_Menu() {
 		ci) computer_Info ;; 	# Call the funtion to display computer info
   		ua) user_Add ;; 	# Call the funktion for creating a user
     		ul) user_List;;		# Calls the funktion to list all users that can log in byt not system
-		uv) ;;                  # Placeholder for viewing user properties
+		uv) user_View;;         # kallar på funktionen som vissar all information som finns med i /etc/passwd och vilka grupper en användare tillhör
   		um) ;;			# Placeholder for modifying user properties
     		ud) ;;			# Placeholder for deleting a user
       		ga) ;;			# Placeholder for adding a group
@@ -151,6 +151,51 @@ user_List(){
 	echo "----------------------------------------------------------"
  	echo
   	read -p "Press Enter to return to the menu... " enter
+}
+
+# Funktionen som vissar all information som finns med i /etc/passwd och vilka grupper en användare tillhör
+user_View(){
+	clear
+	echo "=========================================================="
+	echo " 		 SYSTEM MANAGER (version 1.0.0)"
+	echo "			User view"
+	echo "----------------------------------------------------------"
+	echo 
+
+ 	# Be användaren om en user
+  	read -p "Properties for user: " username
+
+ 	# Kollar om användaren finns
+  	if ! id "$username" &>/dev/null; then
+		echo "The user '$username' does not exist."
+  		echo "----------------------------------------------------------"
+  		read -p "Press enter to return to the menu..." enter
+    		return
+        fi
+
+ 	# Hämta användarens information från /etc/passwd
+  	user_info=$(getent passwd "$username")
+   	IFS=':' read -r uname passwd uid gid comment home shell <<< "$user_info"
+
+	groups=$(id -nG "$username" | tr ' ' ', ') #listar grupper användaren tillhör och omvandlar till , separerad lista.
+
+ 	echo "Properties for user: $username"
+	echo 
+ 	printf "%-18s: %s\n" "User" "$uname"
+  	printf "%-18s: %s\n" "Password" "$passwd"
+   	printf "%-18s: %s\n" "User ID" "$uid"
+    	printf "%-18s: %s\n" "Group ID: $gid"
+     	printf "%-18s: %s\n" "User ID" "$uid"
+      	printf "%-18s: %s\n" "Comment" "$comment"
+        printf "%-18s: %s\n" "Directory" "$home"
+	printf "%-18s: %s\n" "Shell" "$shell"
+
+ 	printf "%-18s: %s\n" "Groups" "$groups"
+      	
+  	echo "----------------------------------------------------------"
+   	echo
+    	read -p "Press Enter to return to the menu... " enter
+     	
 }
 
 # Exits the script
