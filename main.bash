@@ -177,7 +177,7 @@ user_View(){
   	user_info=$(getent passwd "$username")
    	IFS=':' read -r uname passwd uid gid comment home shell <<< "$user_info"
 
-	groups=$(id -nG "$username" | tr ' ' ', ') #listar grupper användaren tillhör och omvandlar till , separerad lista.
+	groups=$(id -nG "$username" | tr ' ' ',  ') #listar grupper användaren tillhör och omvandlar till , separerad lista.
 
  	echo "Properties for user: $username"
 	echo 
@@ -189,6 +189,7 @@ user_View(){
       	printf "%-18s: %s\n" "Comment" "$comment"
         printf "%-18s: %s\n" "Directory" "$home"
 	printf "%-18s: %s\n" "Shell" "$shell"
+	echo
 
  	printf "%-18s: %s\n" "Groups" "$groups"
       	
