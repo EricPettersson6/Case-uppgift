@@ -143,7 +143,7 @@ user_List(){
 	echo "			List of Login Users"
 	echo "----------------------------------------------------------"
 	echo 
-
+	echo -e "USERNAME	FULL NAME	HOME DIRECTORY"
  	# Lista alla användare med UID >= 1000 och giltiga sakl
   	awk -F: '$3 >= 1000 && $7 !~ /nologin|false/ {printf "%-15s %-20s %-20s\n", $1, $5, $6}' /etc/passwd
    	
