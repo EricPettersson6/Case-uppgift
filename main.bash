@@ -184,7 +184,7 @@ user_View(){
  	printf "%-18s: %s\n" "User" "$uname"
   	printf "%-18s: %s\n" "Password" "$passwd"
    	printf "%-18s: %s\n" "User ID" "$uid"
-    	printf "%-18s: %s\n" "Group ID: $gid"
+    	printf "%-18s: %s\n" "Group ID" "$gid"
      	printf "%-18s: %s\n" "User ID" "$uid"
       	printf "%-18s: %s\n" "Comment" "$comment"
         printf "%-18s: %s\n" "Directory" "$home"
