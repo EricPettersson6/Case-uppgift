@@ -185,7 +185,6 @@ user_View(){
   	printf "%-18s: %s\n" "Password" "$passwd"
    	printf "%-18s: %s\n" "User ID" "$uid"
     	printf "%-18s: %s\n" "Group ID" "$gid"
-     	printf "%-18s: %s\n" "User ID" "$uid"
       	printf "%-18s: %s\n" "Comment" "$comment"
         printf "%-18s: %s\n" "Directory" "$home"
 	printf "%-18s: %s\n" "Shell" "$shell"
@@ -196,7 +195,40 @@ user_View(){
   	echo "----------------------------------------------------------"
    	echo
     	read -p "Press Enter to return to the menu... " enter
-     	
+}
+#Funktion för att ta bort en användare och dess hem map
+user_remove(){
+
+	clear
+	echo "=========================================================="
+	echo " 		 SYSTEM MANAGER (version 1.0.0)"
+	echo "			Remove user"
+	echo "----------------------------------------------------------"
+	echo 
+	 
+ 	 # Be användaren om en user
+  	read -p "Enter the username to remove: " username
+
+	if ! id "$username" &>/dev/null; then
+		echo "The user '$username' does not exist."
+  		echo "----------------------------------------------------------"
+  		read -p "Press enter to return to the menu..." enter
+    		return
+
+      	else 
+       	read -p "Are you sure you want to remove $username (Y/n): " confirm
+	if [[ "$confirm" == "Y" ]]; then
+ 		# Ta bort and användaren och hemkatalogen
+  		sudo userdel -r "$username"
+   		if [[ $? -eq 0 ]]; then 
+     			echo "The user $username and its home registry has been removed."
+		else
+  			echo "A problem has occured during the removal och the user"
+     		fi
+       	else
+		echo "The removal was canceled"
+        fi
+	
 }
 
 # Exits the script
