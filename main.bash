@@ -53,7 +53,7 @@ show_Main_Menu() {
     		ul) user_List;;		# Calls the funktion to list all users that can log in byt not system
 		uv) user_View;;         # kallar på funktionen som vissar all information som finns med i /etc/passwd och vilka grupper en användare tillhör
   		um) ;;			# Placeholder for modifying user properties
-    		ud) ;;			# Placeholder for deleting a user
+    		ud) user_Delete;;	# Kallar en funktion som tar bort en användare
       		ga) ;;			# Placeholder for adding a group
 		gl) ;;			# Placeholder for listing groups
   		gv) ;;			# Placeholder for viewing users in a group
@@ -197,11 +197,11 @@ user_View(){
     	read -p "Press Enter to return to the menu... " enter
 }
 # Function to remove a user and their home directory
-user_remove() {
+user_delete() {
     clear
     echo "=========================================================="
     echo " 		 SYSTEM MANAGER (version 1.0.0)"
-    echo "			Remove user"
+    echo "			Delete user"
     echo "----------------------------------------------------------"
     echo 
 	 
