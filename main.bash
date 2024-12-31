@@ -196,16 +196,6 @@ user_View(){
    	echo
     	read -p "Press Enter to return to the menu... " enter
 }
-#Funktion för att ta bort en användare och dess hem map
-user_remove(){
-
-	clear
-	echo "=========================================================="
-	echo " 		 SYSTEM MANAGER (version 1.0.0)"
-	echo "			Remove user"
-	echo "----------------------------------------------------------"
-	echo 
-	 
 # Function to remove a user and their home directory
 user_remove() {
     clear
