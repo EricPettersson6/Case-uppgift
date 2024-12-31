@@ -206,29 +206,41 @@ user_remove(){
 	echo "----------------------------------------------------------"
 	echo 
 	 
- 	 # Be användaren om en user
-  	read -p "Enter the username to remove: " username
+# Function to remove a user and their home directory
+user_remove() {
+    clear
+    echo "=========================================================="
+    echo " 		 SYSTEM MANAGER (version 1.0.0)"
+    echo "			Remove user"
+    echo "----------------------------------------------------------"
+    echo 
+	 
+    # Ask for the username
+    read -p "Enter the username to remove: " username
 
-	if ! id "$username" &>/dev/null; then
-		echo "The user '$username' does not exist."
-  		echo "----------------------------------------------------------"
-  		read -p "Press enter to return to the menu..." enter
-    		return
+    # Check if the user exists
+    if ! id "$username" &>/dev/null; then
+        echo "The user '$username' does not exist."
+        echo "----------------------------------------------------------"
+        read -p "Press enter to return to the menu..." enter
+        return
+    fi
 
-      	else 
-       	read -p "Are you sure you want to remove $username (Y/n): " confirm
-	if [[ "$confirm" == "Y" ]]; then
- 		# Ta bort and användaren och hemkatalogen
-  		sudo userdel -r "$username"
-   		if [[ $? -eq 0 ]]; then 
-     			echo "The user $username and its home registry has been removed."
-		else
-  			echo "A problem has occured during the removal och the user"
-     		fi
-       	else
-		echo "The removal was canceled"
+    # Confirm the removal
+    read -p "Are you sure you want to remove $username (Y/n): " confirm
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+        # Remove the user and their home directory
+        sudo userdel -r "$username"
+        if [[ $? -eq 0 ]]; then 
+            echo "The user '$username' and their home directory have been removed successfully."
+        else
+            echo "An error occurred during the removal of the user."
         fi
-	
+    else
+        echo "The removal was canceled."
+    fi
+    echo "----------------------------------------------------------"
+    read -p "Press enter to return to the menu..." enter
 }
 
 # Exits the script
