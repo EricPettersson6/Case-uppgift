@@ -197,7 +197,7 @@ user_View(){
     	read -p "Press Enter to return to the menu... " enter
 }
 # Function to remove a user and their home directory
-user_delete() {
+user_Delete() {
     clear
     echo "=========================================================="
     echo " 		 SYSTEM MANAGER (version 1.0.0)"
