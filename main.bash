@@ -233,6 +233,66 @@ user_Delete() {
     read -p "Press enter to return to the menu..." enter
 }
 
+#Funktion för att skapa en ny mapp
+folder_add() {
+    clear  
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             Add a New Folder"
+    echo "----------------------------------------------------------"
+    echo
+
+    read -p "Enter Folder Name: " folder_name
+
+    #Kollar om mappen redan finns
+    if [ -d "$folder_name" ]; then
+        echo "Folder $folder_name already exists. Please enter another folder name."
+        read -p "Press enter to continue" dummy
+    else
+        mkdir "$folder_name"  
+        echo "The folder $folder_name has been created."
+    fi
+}
+# Funktion för att lista mappinnehåll
+folder_list() {
+    clear
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             List Folder Contents"
+    echo "----------------------------------------------------------"
+    echo
+
+    read -p "Enter the folder path to list: " folder_path
+
+    # Kollar att mappen existerar
+    if [ -d "$folder_path" ]; then
+        echo "Contents of folder '$folder_path':"
+        ls "$folder_path"
+    else
+        echo "The folder does not exist."
+    fi
+
+    read -p "Press enter to continue..." enter
+}
+
+folder_view() {
+    clear
+    echo""
+}
+
+folder_modify() {
+    clear
+    echo""
+    
+}
+
+folder_delete() {
+    clear
+    echo""
+
+}
+
+
 # Exits the script
 exit_Script() {
 	clear
