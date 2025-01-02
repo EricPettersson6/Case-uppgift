@@ -59,11 +59,11 @@ show_Main_Menu() {
   		gv) ;;			# Placeholder for viewing users in a group
     		gm) ;;			# Placeholder for modifying group membership
       		gd) ;; 			# Placeholder for deleting a group
-      		fa) ;;			# Placeholder for adding a folder
-		fl) ;;			# Placeholder for listing folder contents
-  		fv) ;;			# Placeholder for viewing folder properties
-    		fm) ;;			# Placeholder for modifying folder properties
-      		fd) ;;			# Placeholder for deleting a folder
+      		fa folder_Add) ;;			# Placeholder for adding a folder
+		fl folder_List) ;;			# Placeholder for listing folder contents
+  		fv folder_View) ;;			# Placeholder for viewing folder properties
+    		fm folder_Modify) ;;			# Placeholder for modifying folder properties
+      		fd folder_Delete) ;;			# Placeholder for deleting a folder
 		X) exit_Script ;;
 		*) echo "Invalid choice, try again."; sleep 2 ;;
 	esac
@@ -234,7 +234,7 @@ user_Delete() {
 }
 
 #Funktion för att skapa en ny mapp
-folder_add() {
+folder_Add() {
     clear  
     echo "=========================================================="
     echo "          SYSTEM MANAGER (version 1.0.0)"
@@ -254,7 +254,7 @@ folder_add() {
     fi
 }
 # Funktion för att lista mappinnehåll
-folder_list() {
+folder_List() {
     clear
     echo "=========================================================="
     echo "          SYSTEM MANAGER (version 1.0.0)"
@@ -275,18 +275,18 @@ folder_list() {
     read -p "Press enter to continue..." enter
 }
 
-folder_view() {
+folder_View() {
     clear
     echo""
 }
 
-folder_modify() {
+folder_Modify() {
     clear
     echo""
     
 }
 
-folder_delete() {
+folder_Delete() {
     clear
     echo""
 
