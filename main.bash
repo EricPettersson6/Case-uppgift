@@ -252,7 +252,9 @@ folder_Add() {
         mkdir "$folder_name"  
         echo "The folder $folder_name has been created."
     fi
+    read -p "Press enter to return to the menu..." enter
 }
+
 # Funktion för att lista mappinnehåll
 folder_List() {
     clear
@@ -271,13 +273,33 @@ folder_List() {
     else
         echo "The folder does not exist."
     fi
-
-    read -p "Press enter to continue..." enter
+    read -p "Press enter to return to the menu..." enter
 }
 
+# Funktion för att lista mappegenskaper
 folder_View() {
     clear
-    echo""
+    echo "=========================================================="
+    echo "         SYSTEM MANAGER (version 1.0.0)"
+    echo "             View Folder Properties"
+    echo "----------------------------------------------------------"
+    echo
+
+    read -p "Enter Folder Name: " folder_name
+    
+    # Kollar att mappen existerar
+    if [ -d "$folder_name" ]; then
+    	echo "Folder: $folder_name"
+    	echo "Permissions: $(ls -ld "$folder_name" | awk '{print $1}')"
+    	echo "Owner: $(ls -ld "$folder_name" | awk '{print $3}')"
+    	echo "Group: $(ls -ld "$folder_name" | awk '{print $4}')"
+    	echo "Size: $(du -sh "$folder_name" | awk '{print $1}')"
+    	echo "Files and Subfolders:"
+    	ls -l "$folder_name"
+    else
+    	echo "Folder does not exist. Please enter a valid folder name."
+    fi
+    read -p "Press enter to return to the menu..." enter
 }
 
 folder_Modify() {
