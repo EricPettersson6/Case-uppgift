@@ -198,8 +198,7 @@ user_View(){
 }
 
 #Funktion för att modifiera en användare
-user_Modify(){
-	user_Modify() {
+user_Modify() {
     clear
     echo "=========================================================="
     echo " 		 SYSTEM MANAGER (version 1.0.0)"
