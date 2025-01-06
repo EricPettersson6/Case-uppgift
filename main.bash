@@ -52,16 +52,16 @@ show_Main_Menu() {
   		ua) user_Add ;; 	# Call the funktion for creating a user
     		ul) user_List;;		# Calls the funktion to list all users that can log in byt not system
 		uv) user_View;;         # kallar på funktionen som vissar all information som finns med i /etc/passwd och vilka grupper en användare tillhör
-  		um) user_Modify;;			# Placeholder for modifying user properties
+  		um) user_Modify;;	# kallar en funktion som låter användaren ändra user properties
     		ud) user_Delete;;	# Kallar en funktion som tar bort en användare
-      		ga) group_Add;;			# Placeholder for adding a group
-		gl) group_List ;;			# Placeholder for listing groups
-  		gv) group_View ;;			# Placeholder for viewing users in a group
-    		gm) group_Modify;;			# Placeholder for modifying group membership
-      		gd) group_Delete;; 			# Placeholder for deleting a group
-      		fa) folder_Add ;;			# Placeholder for adding a folder
-		fl) folder_List ;;			# Placeholder for listing folder contents
-  		fv) folder_View ;;			# Placeholder for viewing folder properties
+      		ga) group_Add;;		# kallar en funktion som låter användaren skapa en ny grupp
+		gl) group_List ;;	# kallar en funktion som listar alla GID >= 1000
+  		gv) group_View ;;	# kallar en funktion som låter användaren kolla vilka användare som är med i en grupp
+    		gm) group_Modify;;	# låter användaren lägga till eller ta bort användare i en grupp
+      		gd) group_Delete;; 	#  låter användaren välja en grupp att ta bort
+      		fa) folder_Add ;;	# kallar en funktion som låter användaren att lägga till en folder
+		fl) folder_List ;;	# kallar en funktion som visar alla folders i ett directory
+  		fv) folder_View ;;	# 
     		fm) folder_Modify ;;			# Placeholder for modifying folder properties
       		fd) folder_Delete ;;			# Placeholder for deleting a folder
 		X) exit_Script ;;
@@ -371,7 +371,51 @@ group_List(){
 
 #Funktion för att lista användare i en grupp
 group_View(){
+	clear
+    	echo "=========================================================="
+   	echo "          SYSTEM MANAGER (version 1.0.0)"
+   	echo "             Users in a Specific Group"
+   	echo "----------------------------------------------------------"
+     	echo
 
+	# Be användaren om ett grupp namn
+ 	read -p "Enter the group name: " groupname
+
+  	# Kontrollera om gruppen finns
+   	if ! getent group "$groupname" &>/dev/null; then
+    		echo "The group '$groupname' does not exist."
+      		echo "----------------------------------------------------------"
+		read -p "Press enter to return to the menu..." enter
+  		return
+    	fi
+
+     	# Hämta GID för gruppen
+      	group_gid=$(getentg group "groupname" | cut -d: -f3)
+
+	# Lista användare med gruppen som primär grupp (från /etc/passwd)
+ 	primary_users=$(awk -F: -v gid="groupname" '$4 == gid {print $1}' /etc/passwd)
+
+  	# Lista användare som är medlemmar i gruppen (från /etc/group)
+   	secondary_users=$(getent group "$groupname" | awk -F: '{print $4}' | tr ',' '\n')
+
+    	echo "Users in group 'groupname':"
+     	echo
+      	echo "Primary group members:"
+       	if [[ -n "primary_users" ]]; then
+		echo "primary_users"
+  	else
+   		echo  "None"
+     	fi
+      	echo
+       	echo "Secondary group members:"
+	if [[ -n "secondary_users" ]]; then
+        	echo "$secondary_users"
+   	 else
+        	echo "None"
+   	 fi
+
+    echo "----------------------------------------------------------"
+    read -p "Press enter to return to the menu..." enter
 }
 
 #Funktion för att ta bort eller lägga till en användare i en grupp
