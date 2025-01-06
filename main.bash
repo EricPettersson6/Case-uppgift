@@ -286,7 +286,6 @@ user_Modify() {
     echo "----------------------------------------------------------"
     read -p "Press enter to return to the menu..." enter
 }
-}
 
 # Function to remove a user and their home directory
 user_Delete() {
@@ -355,7 +354,19 @@ group_Add() {
 
 #Funktion för att Lista grupper
 group_List(){
+	clear
+    	echo "=========================================================="
+  	echo "          SYSTEM MANAGER (version 1.0.0)"
+   	echo "             List of Non-System Groups"
+    	echo "----------------------------------------------------------"
+   	echo 	
 
+    	#Lista alla grupper med GID >=1000
+     	awk -F: '$3 >= 1000 {printf "%-20s %-10s\n", $1, $3}' /etc/group
+
+       	echo
+	echo "----------------------------------------------------------"
+    	read -p "Press enter to return to the menu..." enter
 }
 
 #Funktion för att lista användare i en grupp
