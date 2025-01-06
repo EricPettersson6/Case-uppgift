@@ -347,7 +347,37 @@ group_Modify(){
 
 #Funktion för att ta bort en grupp
 group_Delete(){
+    clear
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             Delete Group"
+    echo "----------------------------------------------------------"
+    echo
 
+    #Frågar efter gruppnamn
+    read -p "Enter the group name to delete: " groupname
+
+    #Kollar att gruppen existerar
+    if ! getent group "$groupname" &>/dev/null; then
+        echo "The group '$groupname' does not exist."
+        read -p "Press enter to return to the menu..." enter
+        
+    fi
+
+    #Bekräfta borttagningen 
+    read -p "Are you sure you want to remove $groupname (Y/n): " confirm
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+        groupdel "$groupname"
+        if [[ $? -eq 0 ]]; then 
+            echo "The group '$groupname' has been removed successfully."
+        else
+            echo "An error occurred during the removal of the group."
+        fi
+    else
+        echo "The removal was canceled."
+    fi
+
+    read -p "Press enter to return to the menu..." enter
 }
 
 #Funktion för att skapa en ny mapp
@@ -393,8 +423,7 @@ folder_List() {
 }
 
 folder_View() {
-    clear
-    echo""
+    
 }
 
 folder_Modify() {
@@ -405,10 +434,24 @@ folder_Modify() {
 
 folder_Delete() {
     clear
-    echo""
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             Delete Folder"
+    echo "----------------------------------------------------------"
+    echo
 
+    read -p "Enter the folder path to delete: " folder_path
+
+    #Kollar att mappen existerar
+    if [ -d "$folder_path" ]; then
+        rm -r "$folder_path"
+        echo "The folder '$folder_path' has been deleted."
+    else
+        echo "The folder does not exist."
+    fi
+
+    read -p "Press enter to return to the menu..." enter
 }
-
 
 # Exits the script
 exit_Script() {
