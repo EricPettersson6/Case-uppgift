@@ -52,18 +52,18 @@ show_Main_Menu() {
   		ua) user_Add ;; 	# Call the funktion for creating a user
     		ul) user_List;;		# Calls the funktion to list all users that can log in byt not system
 		uv) user_View;;         # kallar på funktionen som vissar all information som finns med i /etc/passwd och vilka grupper en användare tillhör
-  		um) ;;			# Placeholder for modifying user properties
+  		um) user_Modify;;			# Placeholder for modifying user properties
     		ud) user_Delete;;	# Kallar en funktion som tar bort en användare
-      		ga) ;;			# Placeholder for adding a group
-		gl) ;;			# Placeholder for listing groups
-  		gv) ;;			# Placeholder for viewing users in a group
-    		gm) ;;			# Placeholder for modifying group membership
-      		gd) ;; 			# Placeholder for deleting a group
-      		fa) ;;			# Placeholder for adding a folder
-		fl) ;;			# Placeholder for listing folder contents
-  		fv) ;;			# Placeholder for viewing folder properties
-    		fm) ;;			# Placeholder for modifying folder properties
-      		fd) ;;			# Placeholder for deleting a folder
+      		ga) group_Add;;			# Placeholder for adding a group
+		gl) group_List ;;			# Placeholder for listing groups
+  		gv) group_View ;;			# Placeholder for viewing users in a group
+    		gm) group_Modify;;			# Placeholder for modifying group membership
+      		gd) group_Delete;; 			# Placeholder for deleting a group
+      		fa) folder_Add ;;			# Placeholder for adding a folder
+		fl) folder_List ;;			# Placeholder for listing folder contents
+  		fv) folder_View ;;			# Placeholder for viewing folder properties
+    		fm) folder_Modify ;;			# Placeholder for modifying folder properties
+      		fd) folder_Delete ;;			# Placeholder for deleting a folder
 		X) exit_Script ;;
 		*) echo "Invalid choice, try again."; sleep 2 ;;
 	esac
@@ -196,6 +196,98 @@ user_View(){
    	echo
     	read -p "Press Enter to return to the menu... " enter
 }
+
+#Funktion för att modifiera en användare
+user_Modify() {
+    clear
+    echo "=========================================================="
+    echo " 		 SYSTEM MANAGER (version 1.0.0)"
+    echo "			Modify User"
+    echo "----------------------------------------------------------"
+    echo 
+
+    # Be om användarnamn
+    read -p "Enter the username to modify: " username
+
+    # Kontrollera om användaren finns
+    if ! id "$username" &>/dev/null; then
+        echo "The user '$username' does not exist."
+        echo "----------------------------------------------------------"
+        read -p "Press enter to return to the menu..." enter
+        return
+    fi
+
+    # Visa nuvarande attribut för användaren från /etc/passwd
+    user_info=$(getent passwd "$username")
+    IFS=':' read -r uname passwd uid gid comment home shell <<< "$user_info"
+
+    echo "Current attributes for user '$username':"
+    printf "%-18s: %s\n" "Username" "$uname"
+    printf "%-18s: %s\n" "User ID" "$uid"
+    printf "%-18s: %s\n" "Group ID" "$gid"
+    printf "%-18s: %s\n" "Comment" "$comment"
+    printf "%-18s: %s\n" "Home Directory" "$home"
+    printf "%-18s: %s\n" "Shell" "$shell"
+    echo "----------------------------------------------------------"
+
+    # Alternativ för att ändra attribut
+    echo "What do you want to modify?"
+    echo "1. Comment (Full Name/Description)"
+    echo "2. Home Directory"
+    echo "3. Shell"
+    echo "4. Password"
+    echo "5. Cancel"
+    read -p "Choice [1-5]: " choice
+
+    case $choice in
+        1)
+            read -p "Enter new comment: " new_comment
+            sudo usermod -c "$new_comment" "$username"
+            if [[ $? -eq 0 ]]; then
+                echo "Comment updated successfully for user '$username'."
+            else
+                echo "Failed to update comment for user '$username'."
+            fi
+            ;;
+        2)
+            read -p "Enter new home directory (full path): " new_home
+            sudo usermod -d "$new_home" -m "$username"  # -m flyttar filer till den nya katalogen
+            if [[ $? -eq 0 ]]; then
+                echo "Home directory updated successfully for user '$username'."
+            else
+                echo "Failed to update home directory for user '$username'."
+            fi
+            ;;
+        3)
+            read -p "Enter new shell (e.g., /bin/bash): " new_shell
+            sudo usermod -s "$new_shell" "$username"
+            if [[ $? -eq 0 ]]; then
+                echo "Shell updated successfully for user '$username'."
+            else
+                echo "Failed to update shell for user '$username'."
+            fi
+            ;;
+        4)
+            echo "Changing password for user '$username'..."
+            sudo passwd "$username"
+            if [[ $? -eq 0 ]]; then
+                echo "Password updated successfully for user '$username'."
+            else
+                echo "Failed to update password for user '$username'."
+            fi
+            ;;
+        5)
+            echo "Modification canceled."
+            ;;
+        *)
+            echo "Invalid choice. Returning to the menu."
+            ;;
+    esac
+    echo "----------------------------------------------------------"
+    read -p "Press enter to return to the menu..." enter
+}
+}
+
 # Function to remove a user and their home directory
 user_Delete() {
     clear
@@ -232,6 +324,91 @@ user_Delete() {
     echo "----------------------------------------------------------"
     read -p "Press enter to return to the menu..." enter
 }
+
+#Funktion för att Skapa nya grupper
+group_Add() {
+
+}
+
+#Funktion för att Lista grupper
+group_List(){
+
+}
+
+#Funktion för att lista användare i en grupp
+group_View(){
+
+}
+
+#Funktion för att ta bort eller lägga till en användare i en grupp
+group_Modify(){
+
+}
+
+#Funktion för att ta bort en grupp
+group_Delete(){
+
+}
+
+#Funktion för att skapa en ny mapp
+folder_Add() {
+    clear  
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             Add a New Folder"
+    echo "----------------------------------------------------------"
+    echo
+
+    read -p "Enter Folder Name: " folder_name
+
+    #Kollar om mappen redan finns
+    if [ -d "$folder_name" ]; then
+        echo "Folder $folder_name already exists. Please enter another folder name."
+        read -p "Press enter to continue" enter
+    else
+        mkdir "$folder_name"  
+        echo "The folder $folder_name has been created."
+    fi
+}
+# Funktion för att lista mappinnehåll
+folder_List() {
+    clear
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             List Folder Contents"
+    echo "----------------------------------------------------------"
+    echo
+
+    read -p "Enter the folder path to list: " folder_path
+
+    # Kollar att mappen existerar
+    if [ -d "$folder_path" ]; then
+        echo "Contents of folder '$folder_path':"
+        ls "$folder_path"
+    else
+        echo "The folder does not exist."
+    fi
+
+    read -p "Press enter to continue..." enter
+}
+
+folder_View() {
+    clear
+    echo""
+}
+
+folder_Modify() {
+    clear
+    echo""
+    
+}
+
+folder_Delete() {
+    clear
+    echo""
+
+}
+
 
 # Exits the script
 exit_Script() {
