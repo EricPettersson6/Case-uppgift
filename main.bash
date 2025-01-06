@@ -327,7 +327,30 @@ user_Delete() {
 
 #Funktion för att Skapa nya grupper
 group_Add() {
+    clear
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             Add a New Group"
+    echo "----------------------------------------------------------"
+    echo
 
+    read -p "Enter the group name: " groupname
+
+    #Kollar om gruppen redan existerar
+    if getent group "$groupname" &>/dev/null; then
+        echo "Error: The group '$groupname' already exists."
+        read -p "Press enter to return to the menu..." enter    
+    fi
+
+    #Skapar nya gruppen
+    groupadd "$groupname"
+    if [[ $? -eq 0 ]]; then
+        echo "The group '$groupname' has been created successfully."
+    else
+        echo "Error: Failed to create the group '$groupname'."
+    fi
+
+    read -p "Press enter to return to the menu..." enter
 }
 
 #Funktion för att Lista grupper
