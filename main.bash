@@ -420,7 +420,72 @@ group_View(){
 
 #Funktion för att ta bort eller lägga till en användare i en grupp
 group_Modify(){
+	clear
+    	echo "=========================================================="
+   	echo "          SYSTEM MANAGER (version 1.0.0)"
+   	echo "            Add or remove a user from group"
+   	echo "----------------------------------------------------------"
+     	echo
 
+      	# Be användaren om ett grupp namn
+ 	read -p "Enter the group name: " groupname
+
+  	# Kontrollera om gruppen finns
+   	if ! getent group "$groupname" &>/dev/null; then
+    		echo "The group '$groupname' does not exist."
+      		echo "----------------------------------------------------------"
+		read -p "Press enter to return to the menu..." enter
+  		return
+    	fi
+
+	# Alternativ för att lägga till eller ta bort användare
+ 	echo "What would you like to do?"
+  	echo "1. add a user to the group"
+   	echo "2. Remove a user from the group"
+    	echo "3. Cancel"
+     	read -p "Choice [1-3]: " choice
+
+      	case $choice in 
+       		1)
+	 		# Lägg till en användare
+    			read -p "Enter the username to add: " username
+       			if id "$username" &>/dev/null; then
+	  			sudo usermod -aG "$groupname" "$username"
+      				if [[ $? -eq 0 ]]; then
+	  				echo "User 'username' has been added to group '$groupname'."
+       				else
+	   				echo "Failed to add user '$username' to group "$groupname"."
+				fi
+    			else
+       				echo "The user '$username' does not exist."
+	   		fi
+      			;;
+	 	 2)
+     			#ta bort en användare
+			read -p "Enter the username to remove: " username
+   			if id "$username" &>/dev/null; then
+      				current_groups=$(id -nG "$username" | tr ' ' ',')
+	  			updated_groups=$(echo "$current_groups" | sed "s/\b$groupname\b//g" | sed 's/,,/,/g' | sed 's/^,//' | sed 's/,$//') # tar bort gruppen, tar bort överflödiga , tecken. tar bort , tecken i början och slutet
+               			sudo usermod -G "$updated_groups" "$username"
+                		if [[ $? -eq 0 ]]; then
+                    			echo "User '$username' has been removed from group '$groupname'."
+                		else
+                    			echo "Failed to remove user '$username' from group '$groupname'."
+                		fi
+            		else
+               			echo "The user '$username' does not exist."
+            		fi
+            		;;
+        	3)
+            		echo "Modification canceled."
+            		;;
+        	*)
+            		echo "Invalid choice. Returning to the menu."
+            		;;
+    	esac
+
+   		echo "----------------------------------------------------------"
+    		read -p "Press enter to return to the menu..." enter
 }
 
 #Funktion för att ta bort en grupp
