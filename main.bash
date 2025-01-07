@@ -579,9 +579,24 @@ folder_View() {
     if [ -d "$folder_name" ]; then
     	echo "Folder: $folder_name"
     	echo "Permissions: $(ls -ld "$folder_name" | awk '{print $1}')"
+        sticky_bit=$(echo "$permissions" | awk '{print substr($1, 10, 1)}')
+        setgid_bit=$(echo "$permissions" | awk '{print substr($1, 5, 1)}')
+    if [ "$sticky_bit" == "t" ]; then
+        echo "Sticky Bit: Enabled"
+    else
+        echo "Sticky Bit: Not Set" 
+    fi
+        
+    if [ "$setgid_bit" == "s" ]; then
+        echo "Setgid: Enabled"
+    else
+        echo "Setgid: Not Set"
+    fi
     	echo "Owner: $(ls -ld "$folder_name" | awk '{print $3}')"
     	echo "Group: $(ls -ld "$folder_name" | awk '{print $4}')"
     	echo "Size: $(du -sh "$folder_name" | awk '{print $1}')"
+        last_modified=$(stat --format='%y' "$folder_name")
+        echo "Last Modified: $last_modified"
     	echo "Files and Subfolders:"
     	ls -l "$folder_name"
     else
