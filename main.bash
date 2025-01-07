@@ -552,6 +552,7 @@ folder_List() {
     echo "----------------------------------------------------------"
     echo
 
+    ls -l | grep "^d" | awk '{print $9}' | sort
     read -p "Enter the folder path to list: " folder_path
 
     # Kollar att mappen existerar
@@ -572,7 +573,7 @@ folder_View() {
     echo "             View Folder Properties"
     echo "----------------------------------------------------------"
     echo
-
+    ls -l | grep "^d" | awk '{print $9}' | sort
     read -p "Enter Folder Name: " folder_name
     
     # Kollar att mappen existerar
