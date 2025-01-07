@@ -311,7 +311,7 @@ user_Delete() {
     read -p "Are you sure you want to remove $username (Y/n): " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
         # Remove the user and their home directory
-        sudo userdel -r "$username"
+        sudo userdel -r "$username" &>/dev/null
         if [[ $? -eq 0 ]]; then 
             echo "The user '$username' and their home directory have been removed successfully."
         else
