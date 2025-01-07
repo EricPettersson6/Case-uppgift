@@ -579,9 +579,24 @@ folder_View() {
     if [ -d "$folder_name" ]; then
     	echo "Folder: $folder_name"
     	echo "Permissions: $(ls -ld "$folder_name" | awk '{print $1}')"
+        sticky_bit=$(echo "$permissions" | awk '{print substr($1, 10, 1)}')
+        setgid_bit=$(echo "$permissions" | awk '{print substr($1, 5, 1)}')
+    if [ "$sticky_bit" == "t" ]; then
+        echo "Sticky Bit: Enabled"
+    else
+        echo "Sticky Bit: Not Set" 
+    fi
+        
+    if [ "$setgid_bit" == "s" ]; then
+        echo "Setgid: Enabled"
+    else
+        echo "Setgid: Not Set"
+    fi
     	echo "Owner: $(ls -ld "$folder_name" | awk '{print $3}')"
     	echo "Group: $(ls -ld "$folder_name" | awk '{print $4}')"
     	echo "Size: $(du -sh "$folder_name" | awk '{print $1}')"
+        last_modified=$(stat --format='%y' "$folder_name")
+        echo "Last Modified: $last_modified"
     	echo "Files and Subfolders:"
     	ls -l "$folder_name"
     else
@@ -592,8 +607,84 @@ folder_View() {
 
 folder_Modify() {
     clear
-    echo""
-    
+    echo "=========================================================="
+    echo "          SYSTEM MANAGER (version 1.0.0)"
+    echo "             Modify Folder Properties"
+    echo "----------------------------------------------------------"
+    echo
+
+    read -p "Enter the folder name you want to modify: " folder_name
+    if [ -d "$folder_name" ]; then
+      clear
+      echo "Choose the properties you want to modify"
+      echo "1. Folder Name"
+      echo "2. Permissions"
+      echo "3. Owner"
+      echo "4. Group"
+      echo "5. Size"
+      read -p "Enter your choice: " choice
+
+      case $choice in
+            1)
+                  clear
+                  read -p "Enter the new folder name: " new_folder_name
+                  sudo mv "$folder_name" "$new_folder_name" &>/dev/null
+                  if [ $? -eq 0 ]; then
+                    echo "The folder name has been changed"
+                  else
+                    echo "ERROR: You cannot have this folder name."
+                  fi
+                  ;;
+
+          2)
+                  clear
+                  read -p "Enter the new permissions: " permissions
+                  sudo chmod "$permissions" "$folder_name" &>/dev/null
+                  if [ $? -eq 0 ]; then
+                    echo "The permissions have been changed"
+                  else
+                    echo "ERROR: You cannot have these permissions."
+                  fi
+                  ;;
+
+          3)
+                  clear
+                  read -p "Enter the new owner: " owner
+                  sudo chown "$owner" "$folder_name" &>/dev/null
+                  if [ $? -eq 0 ]; then
+                    echo "The owner has been changed"
+                  else
+                    echo "ERROR: You cannot have this owner."
+                  fi
+                  ;;
+
+          4)
+                  clear
+                  read -p "Enter the new group: " group
+                  sudo chgrp "$group" "$folder_name" &>/dev/null
+                  if [ $? -eq 0 ]; then
+                    echo "The group has been changed"
+                  else
+                    echo "ERROR: You cannot have this group."
+                  fi
+                  ;;
+
+          5)
+                  clear
+                  echo "The size of a folder is determined by its contents."
+                  echo "You cannot directly change the size."
+                  ;;
+
+          *)
+                  echo "Invalid input. returning to the menu."
+                  ;;
+
+      esac
+    else
+                  echo "Folder does not exist. Please enter a valid folder name."
+    fi
+
+         	  read -p "Press enter to return to the menu..." enter
 }
 
 folder_Delete() {
